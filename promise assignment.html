@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Space Launch Information Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #0b1c2d;
+            color: #ffffff;
+            text-align: center;
+            padding: 30px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #1e90ff;
+            color: white;
+        }
+
+        button:hover {
+            background-color: #187bcd;
+        }
+
+        #loading {
+            margin-top: 20px;
+            font-size: 18px;
+            color: yellow;
+            display: none;
+        }
+
+        #launchDetails {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #1c2e4a;
+            border-radius: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🚀 Space Launch Information Dashboard</h1>
+
+    <button onclick="loadLaunch()">Load Latest Launch</button>
+
+    <div id="loading">Loading latest launch data...</div>
+
+    <div id="launchDetails">
+        <h2>Mission Details</h2>
+        <p><strong>Mission Name:</strong> <span id="missionName"></span></p>
+    </div>
+
+    <script>
+        function loadLaunch() {
+            const loading = document.getElementById("loading");
+            const details = document.getElementById("launchDetails");
+
+            loading.style.display = "block";
+            details.style.display = "none";
+
+            fetch("https://api.spacexdata.com/v4/launches/latest")
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Failed to fetch data");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    loading.style.display = "none";
+                    details.style.display = "block";
+                    document.getElementById("missionName").innerText = data.name;
+                })
+                .catch(error => {
+                    loading.style.display = "none";
+                    alert("Error: " + error.message);
+                });
+        }
+    </script>
+
+</body>
+</html>
